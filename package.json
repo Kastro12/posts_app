@@ -1,7 +1,7 @@
 {
   "name": "posts-app",
   "version": "0.1.0",
-  "homepage": "https://AleksandarKastro.github.io/posts_app",
+  "homepage": "https://Kastro12.github.io/posts_app",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
