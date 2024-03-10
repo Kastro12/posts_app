@@ -10,6 +10,8 @@ import {
   getUsersByUserName,
 } from "../store/posts";
 
+import PostCard from "../components/card/PostCard";
+
 const Posts: FC = () => {
   const [postsData, setPostsData] = useState<any>(false);
 
@@ -83,73 +85,7 @@ const Posts: FC = () => {
               }
             />
             {postsData.posts.map((post: any) => {
-              return (
-                <div className="col-lg-6 item mb-4" key={post.id}>
-                  <div className="card">
-                    <div className="card-body">
-                      <p>
-                        <strong>User: </strong>
-                        <small>
-                          {post.user && post.user.name ? post.user.name : ""}
-                        </small>
-                      </p>
-                      <h5 className="card-title">
-                        <Link
-                          to={`/post/${post.id}`}
-                          style={{
-                            textDecoration: "none",
-                            color: "#343434",
-                            minHeight: "75px",
-                            display: "block",
-                          }}
-                        >
-                          {post.title}
-                        </Link>
-                      </h5>
-                      <p
-                        className="card-text"
-                        style={{
-                          minHeight: "48px",
-                        }}
-                      >
-                        {post.title}
-                      </p>
-                      <Link to={`/post/${post.id}`} className="card-link ">
-                        Read more
-                      </Link>
-                      {post.comments &&
-                        Array.isArray(post.comments) &&
-                        post.comments.length > 0 && (
-                          <>
-                            <p className="mt-3">
-                              <small>
-                                <strong>Comments:</strong>
-                              </small>
-                            </p>
-                            <ul className="post-comments list-group list-group-flush">
-                              {post.comments.map((comment: any) => (
-                                <li
-                                  className="list-group-item"
-                                  key={comment.id}
-                                >
-                                  <p
-                                    className="text-sm"
-                                    style={{ color: "#ccc" }}
-                                  >
-                                    <small>{comment.email}:</small>
-                                  </p>
-                                  <p className="text-sm">
-                                    <small>{comment.name}</small>
-                                  </p>
-                                </li>
-                              ))}
-                            </ul>
-                          </>
-                        )}
-                    </div>
-                  </div>
-                </div>
-              );
+              return <PostCard post={post} key={post.id} hasLink={true} />;
             })}
           </div>
         ) : (

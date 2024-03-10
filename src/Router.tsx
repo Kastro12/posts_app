@@ -19,7 +19,7 @@ const Router = () => {
     <Suspense fallback={<div></div>}>
       <Routes>
         <Route path="/" element={<Navigate to="/posts" />} />
-
+        <Route path="/posts_app" element={<Navigate to="/posts" />} />
         {ROUTES.map((route) => (
           <Route
             key={route.id}
