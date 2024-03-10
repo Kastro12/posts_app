@@ -25,3 +25,20 @@ export const linkToParamObject = (link: string) => {
 
   return paramsObject;
 };
+
+export const getUniqueItems = (
+  arr: { [key: string]: any }[],
+  key: string
+): any[] => {
+  const uniqueItems: { [key: string]: boolean } = {};
+  const result: any[] = [];
+
+  arr.forEach((item) => {
+    if (!uniqueItems[item[key]]) {
+      uniqueItems[item[key]] = true;
+      result.push(item[key]);
+    }
+  });
+
+  return result;
+};

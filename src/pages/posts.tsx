@@ -1,100 +1,97 @@
 import Header from "../components/header/Header";
 import { FC, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import axios from "axios";
 import SearchForm from "../components/forms/search/SearchForm";
-import { objectToQueryString, linkToParamObject } from "../utils/auxiliary";
+import { linkToParamObject, getUniqueItems } from "../utils/auxiliary";
+import Pagination from "../components/pagination/Pagination";
+import {
+  getPostsByPage,
+  getUsersByUsersId,
+  getUsersByUserName,
+} from "../store/posts";
 
 const Posts: FC = () => {
   const [postsData, setPostsData] = useState<any>(false);
+
   const location = useLocation();
+  let paramObject = linkToParamObject(location.search);
 
-  const paramObject = linkToParamObject(location.search);
+  const currentPage =
+    paramObject && paramObject._page ? Number(paramObject._page) : Number(1);
 
-  console.log("paramObject", paramObject);
-  console.log(objectToQueryString(paramObject));
-
-  useEffect(() => {
-    const fetchData = async () => {};
-    console.log("postsData", postsData);
-    console.log("paramObject", paramObject);
-  }, [paramObject]);
+  const currentSearch =
+    paramObject && paramObject.searchTerms ? paramObject.searchTerms : ``;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const posts = await axios.get(
-          `https://jsonplaceholder.typicode.com/posts?${objectToQueryString(paramObject)}`
-        );
+        let usersIDs;
+        let usersByUserName;
+        if (currentSearch) {
+          usersByUserName = await getUsersByUserName(currentSearch);
+          usersIDs = usersByUserName.map((user: { id: number }) => user.id);
+          if (Array.isArray(usersIDs) && usersIDs.length < 1) {
+            setPostsData(false);
+            return;
+          }
+        }
 
-        if (posts) {
-          const postIdString = posts.data
-            .map((post: any) => `postId=${post.id}`)
-            .join("&&");
-
-          const comments = await axios.get(
-            `https://jsonplaceholder.typicode.com/comments?${postIdString}`
-          );
-
-          const userIds: any = [];
-          posts.data.forEach((post: any) => {
-            if (!userIds.includes(post.userId)) {
-              userIds.push(post.userId);
-            }
-          });
-          const userIdString = userIds
-            .map((id: any) => `userId=${id}`)
-            .join("&&");
-
-          const users = await axios.get(
-            `https://jsonplaceholder.typicode.com/users?${userIdString}`
-          );
-
-          if (comments && users) {
-            const postsWithComments = posts.data.map((post: any) => {
-              const postComments = comments.data.filter(
-                (comment: any) => comment.postId === post.id
-              );
-
-              const postUser = users.data.find(
+        const postsData = await getPostsByPage(usersIDs);
+        if (postsData) {
+          const updatedAndSetPostData = (users: []) => {
+            const postsWithUsers = postsData.posts.map((post: any) => {
+              const postUser = users.find(
                 (user: any) => user.id === post.userId
               );
-
-              return { ...post, comments: postComments, user: postUser };
+              return { ...post, user: postUser };
             });
-            setPostsData(postsWithComments);
+
+            setPostsData({
+              ...{ posts: postsWithUsers },
+              totalPosts: postsData.totalPosts,
+            });
+          };
+
+          if (usersByUserName) {
+            updatedAndSetPostData(usersByUserName);
+          } else {
+            const usersId = getUniqueItems(postsData.posts, "userId");
+            const users = await getUsersByUsersId(usersId);
+            if (users) {
+              updatedAndSetPostData(users);
+            }
           }
         }
       } catch (error) {
         console.error(error);
       }
     };
-
     fetchData();
-  }, []);
+  }, [currentPage, currentSearch]);
 
   return (
     <>
       <Header title="All posts" />
       <div className="container">
-        <SearchForm
-          initialValues={
-            paramObject && paramObject.searchTerms
-              ? paramObject.searchTerms
-              : ""
-          }
-          onSearch={() => console.log("zz")}
-        />
-        <div className="row items mt-4">
-          {postsData &&
-            postsData.map((post: any) => {
+        <SearchForm initialValue={currentSearch} />
+
+        {postsData ? (
+          <div className="row items mt-4">
+            <Pagination
+              totalItems={
+                postsData && postsData.totalPosts ? postsData.totalPosts : false
+              }
+            />
+            {postsData.posts.map((post: any) => {
               return (
-                <div className="col-lg-4 item mb-4" key={post.id}>
+                <div className="col-lg-6 item mb-4" key={post.id}>
                   <div className="card">
                     <div className="card-body">
                       <p>
                         <strong>User: </strong>
-                        <small>{post.user.name}</small>
+                        <small>
+                          {post.user && post.user.name ? post.user.name : ""}
+                        </small>
                       </p>
                       <h5 className="card-title">
                         <Link
@@ -154,7 +151,12 @@ const Posts: FC = () => {
                 </div>
               );
             })}
-        </div>
+          </div>
+        ) : (
+          <div className="row mt-5">
+            <p className="text-center">NO DATA</p>
+          </div>
+        )}
       </div>
     </>
   );

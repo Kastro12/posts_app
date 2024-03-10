@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { multiLazyLoadPage } from "./utils/routeUtils";
 export const ROUTES = multiLazyLoadPage([
@@ -15,13 +16,19 @@ export const ROUTES = multiLazyLoadPage([
 
 const Router = () => {
   return (
-    <Routes>
-      <Route path="/" element={<Navigate to="/posts" />} />
+    <Suspense fallback={<div></div>}>
+      <Routes>
+        <Route path="/" element={<Navigate to="/posts" />} />
 
-      {ROUTES.map((route) => (
-        <Route key={route.id} path={route.link} element={<route.component />} />
-      ))}
-    </Routes>
+        {ROUTES.map((route) => (
+          <Route
+            key={route.id}
+            path={route.link}
+            element={<route.component />}
+          />
+        ))}
+      </Routes>
+    </Suspense>
   );
 };
 
