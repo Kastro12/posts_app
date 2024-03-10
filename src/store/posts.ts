@@ -1,5 +1,6 @@
 import axios from "axios";
 import { objectToQueryString, linkToParamObject } from "../utils/auxiliary";
+import { Post, Comment } from "../interfaces/post.iterface";
 
 export const getPostsByPage = (usersIds?: number[]) => {
   const search = window.location.search;
@@ -26,15 +27,15 @@ export const getPostsByPage = (usersIds?: number[]) => {
     );
     const totalPosts = posts.headers["x-total-count"];
     if (posts && totalPosts) {
-      const postsId = posts.data.map((post: any) => ({
+      const postsId = posts.data.map((post: Post) => ({
         id: post.id,
       }));
 
       const comments = await getCommentsByPostsId(postsId);
       if (comments) {
-        const postsWithComments = posts.data.map((post: any) => {
+        const postsWithComments = posts.data.map((post: Post) => {
           const postComments = comments.filter(
-            (comment: any) => comment.postId === post.id
+            (comment: Comment) => comment.postId === post.id
           );
           return { ...post, comments: postComments };
         });

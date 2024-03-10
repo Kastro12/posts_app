@@ -20,7 +20,7 @@ const Pagination = ({ totalItems }: PaginationProps) => {
   );
 
   return (
-    <nav aria-label="Page navigation example">
+    <nav className="mt-3 mb-5 d-flex justify-content-center">
       <ul className="pagination">
         <li className={`page-item${previousPage ? "" : " disabled"}`}>
           <Link

@@ -30,11 +30,14 @@ export interface Comment {
   body: string;
 }
 
-export interface PostData {
+export interface Post {
   userId: number;
   id: number;
   title: string;
   body: string;
+}
+
+export interface PostData extends Post {
   comments: Comment[];
   user: User;
 }

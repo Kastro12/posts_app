@@ -12,13 +12,14 @@ const RenderPosts = ({ posts, totalPosts }: PostsData) => {
       </div>
     );
   }
+
   return (
     <>
       <div className="row items mt-4">
-        <Pagination totalItems={totalPosts ? totalPosts : false} />
         {posts.map((post: any) => {
           return <PostCard post={post} key={post.id} hasLink={true} />;
         })}
+        <Pagination totalItems={totalPosts ? totalPosts : false} />
       </div>
     </>
   );

@@ -9,9 +9,10 @@ import {
   getUsersByUsersId,
 } from "../store/posts";
 import { linkToParamObject, getUniqueItems } from "../utils/auxiliary";
+import { Post, User, Comment } from "../interfaces/post.iterface";
 
 export interface PostsData {
-  posts: [{ id: number; user: any; title: string; comments: any[] }];
+  posts: [{ id: number; user: User; title: string; comments: Comment[] }];
   totalPosts: string;
 }
 
@@ -42,9 +43,9 @@ const componentWithPostData = (OriginalComponent: any) => {
           const postsData = await getPostsByPage(usersIDs);
           if (postsData) {
             const updatedAndSetPostData = (users: []) => {
-              const postsWithUsers = postsData.posts.map((post: any) => {
+              const postsWithUsers = postsData.posts.map((post: Post) => {
                 const postUser = users.find(
-                  (user: any) => user.id === post.userId
+                  (user: User) => user.id === post.userId
                 );
                 return { ...post, user: postUser };
               });

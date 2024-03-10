@@ -12,7 +12,6 @@ const Post: FC = () => {
     const fetchData = async () => {
       try {
         const post = await getPost(id);
-
         if (post) setPost(post);
       } catch (error) {
         return error;
@@ -20,11 +19,11 @@ const Post: FC = () => {
     };
 
     fetchData();
-  }, []);
+  }, [id]);
 
   return (
     <>
-      <Header title="Posts" />
+      <Header title="Post" />
       <div className="container">
         {post && <PostCard post={post} hasLink={false} />}
       </div>
