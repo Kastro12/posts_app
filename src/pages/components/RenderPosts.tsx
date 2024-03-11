@@ -6,9 +6,9 @@ import Pagination from "../../components/pagination/Pagination";
 import PostCard from "../../components/card/PostCard";
 import { ComponentProps } from "../../interfaces/route.interface";
 
-export type RenderPosts = PostsData & ComponentProps;
+export type RenderComponent = PostsData & ComponentProps;
 
-const RenderPosts: FC<RenderPosts> = ({ posts, totalPosts, message }) => {
+const RenderPosts: FC<RenderComponent> = ({ posts, totalPosts, message }) => {
   console.log(`${message} RenderPosts`);
 
   if (posts === null) {

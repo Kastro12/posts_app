@@ -1,4 +1,4 @@
-import { FC, ChangeEvent, memo } from "react";
+import { FC, ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   debounce,

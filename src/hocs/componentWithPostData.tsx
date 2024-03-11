@@ -1,7 +1,7 @@
 // This Higher Order Component (HOC) fetches a list of 'posts' and the total quantity of 'posts'.
 //By altering the parameters 'page' and 'searchTerms', the component retrieves new data.
 
-import { FC, useEffect, useState, ComponentType } from "react";
+import { FC, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import {
   getUsersByUserName,

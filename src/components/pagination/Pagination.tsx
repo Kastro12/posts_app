@@ -7,9 +7,9 @@ interface PaginationProps {
   totalItems: string | boolean | number;
 }
 
-type Pagination = PaginationProps & ComponentProps;
+type PaginationComponent = PaginationProps & ComponentProps;
 
-const Pagination: FC<Pagination> = ({ totalItems, message }) => {
+const Pagination: FC<PaginationComponent> = ({ totalItems, message }) => {
   console.log(`${message} Pagination`);
   const location = useLocation();
   let paramObject = linkToParamObject(location.search);
