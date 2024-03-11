@@ -1,12 +1,16 @@
 import { Link, useLocation } from "react-router-dom";
 import { objectToQueryString, linkToParamObject } from "../../utils/auxiliary";
 import { generatePaginationArray } from "../../utils/routeUtils";
-
+import { ComponentProps } from "../../interfaces/route.interface";
+import { FC } from "react";
 interface PaginationProps {
   totalItems: string | boolean | number;
 }
 
-const Pagination = ({ totalItems }: PaginationProps) => {
+type Pagination = PaginationProps & ComponentProps;
+
+const Pagination: FC<Pagination> = ({ totalItems, message }) => {
+  console.log(`${message} Pagination`);
   const location = useLocation();
   let paramObject = linkToParamObject(location.search);
   const currentPage =

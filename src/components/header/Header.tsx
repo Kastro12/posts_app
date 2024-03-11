@@ -1,6 +1,7 @@
 import { FC } from "react";
+import { ComponentProps } from "../../interfaces/route.interface";
 
-interface HeaderProps {
+interface HeaderProps extends ComponentProps {
   title: string;
 }
 
@@ -10,7 +11,8 @@ const headerStyle = {
   fontWeight: "500",
 };
 
-const Header: FC<HeaderProps> = ({ title }) => {
+const Header: FC<HeaderProps> = ({ title, message }) => {
+  console.log(`${message} Header`);
   return (
     <div className="mb-5" style={headerStyle}>
       <div className="pt-3 pb-3 text-center">{title}</div>

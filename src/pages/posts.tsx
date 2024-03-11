@@ -1,24 +1,21 @@
 import Header from "../components/header/Header";
-import { FC } from "react";
-import { useLocation } from "react-router-dom";
+import { FC, memo } from "react";
 import SearchForm from "../components/forms/search/SearchForm";
-import { linkToParamObject } from "../utils/auxiliary";
 import RenderPosts from "./components/RenderPosts";
+import { ComponentProps } from "../interfaces/route.interface";
 
-const Posts: FC = () => {
-  const location = useLocation();
-  let paramObject = linkToParamObject(location.search);
+const MemoizedHeader = memo(Header);
 
-  const currentSearch =
-    paramObject && paramObject.searchTerms ? paramObject.searchTerms : ``;
+const Posts: FC<ComponentProps> = ({ message }) => {
+  console.log(`${message} Posts`);
 
   return (
     <>
-      <Header title="All posts" />
+      <MemoizedHeader title="All posts" message={message} />
 
       <div className="container">
-        <SearchForm initialValue={currentSearch} />
-        <RenderPosts />
+        <SearchForm message={message} />
+        <RenderPosts message={message} />
       </div>
     </>
   );

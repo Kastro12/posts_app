@@ -1,13 +1,15 @@
 import { FC } from "react";
 import { PostData } from "../../interfaces/post.iterface";
 import { Link } from "react-router-dom";
+import { ComponentProps } from "../../interfaces/route.interface";
 
-interface PostCardProps {
+interface PostCardProps extends ComponentProps {
   post: PostData | boolean;
   hasLink: boolean;
 }
 
-const PostCard: FC<PostCardProps> = ({ post, hasLink }) => {
+const PostCard: FC<PostCardProps> = ({ post, hasLink, message }) => {
+  console.log(`${message} PostCard`);
   if (typeof post === "boolean") {
     return <></>;
   }

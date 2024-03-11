@@ -1,14 +1,22 @@
-import { FC, ChangeEvent } from "react";
+import { FC, ChangeEvent, memo } from "react";
 import { useNavigate } from "react-router-dom";
-import { debounce, objectToQueryString } from "../../../utils/auxiliary";
+import {
+  debounce,
+  objectToQueryString,
+  linkToParamObject,
+} from "../../../utils/auxiliary";
+import { ComponentProps } from "../../../interfaces/route.interface";
+import { useLocation } from "react-router-dom";
 
-interface SearchFormProps {
-  initialValue: string;
-}
+const SearchForm: FC<ComponentProps> = ({ message }) => {
+  console.log(`${message} SearchForm`);
+  const location = useLocation();
+  let paramObject = linkToParamObject(location.search);
 
-const SearchForm: FC<SearchFormProps> = ({ initialValue }) => {
+  const currentSearch =
+    paramObject && paramObject.searchTerms ? paramObject.searchTerms : ``;
+
   const navigate = useNavigate();
-
   const handleInputChange = debounce((event: ChangeEvent<HTMLInputElement>) => {
     navigate(
       `/posts?${
@@ -29,7 +37,7 @@ const SearchForm: FC<SearchFormProps> = ({ initialValue }) => {
         </label>
 
         <input
-          defaultValue={initialValue}
+          defaultValue={currentSearch}
           type="text"
           id="searchByNameInput"
           placeholder="Type a name"
